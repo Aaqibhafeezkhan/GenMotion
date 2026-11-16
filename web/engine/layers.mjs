@@ -13,13 +13,28 @@ function font(px, family, { weight = 700, italic = false } = {}) {
 export function parseRuns(text) {
   const words = [];
   let accent = false;
+
   for (const raw of String(text).split(/\s+/).filter(Boolean)) {
     let w = raw;
-    const opens = w.startsWith('*'); if (opens) { accent = true; w = w.slice(1); }
-    const closes = w.endsWith('*'); if (closes) w = w.slice(0, -1);
+
+    const opens = w.startsWith('*');
+    if (opens) {
+      accent = true;
+      w = w.slice(1);
+    }
+
+    const closing = w.match(/\*([.,!?;:)]*)$/);
+    const closes = Boolean(closing);
+
+    if (closes) {
+      w = w.slice(0, closing.index) + closing[1];
+    }
+
     if (w) words.push({ text: w, accent });
+
     if (closes) accent = false;
   }
+
   return words;
 }
 

@@ -51,6 +51,20 @@ test('image prompt adds the shared look', () => {
 test('accent runs', () => {
   assert.deepEqual(parseRuns('Make *it move* now'), [{ text: 'Make', accent: false }, { text: 'it', accent: true }, { text: 'move', accent: true }, { text: 'now', accent: false }]);
   assert.deepEqual(parseRuns('*one*'), [{ text: 'one', accent: true }]);
+
+  assert.deepEqual(parseRuns('Meet *Atlas*. Quiet now'), [
+    { text: 'Meet', accent: false },
+    { text: 'Atlas.', accent: true },
+    { text: 'Quiet', accent: false },
+    { text: 'now', accent: false }
+  ]);
+
+  assert.deepEqual(parseRuns('Make it *move*, fast'), [
+    { text: 'Make', accent: false },
+    { text: 'it', accent: false },
+    { text: 'move,', accent: true },
+    { text: 'fast', accent: false }
+  ]);
 });
 
 test('number formatting', () => {
